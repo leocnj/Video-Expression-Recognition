@@ -1,16 +1,15 @@
-from sklearn import cluster
-import cv2
-import sys
-import os
-import dlib
-import glob
-from skimage import io
-import numpy as np
-from sklearn.cluster import KMeans
 #from sklearn.manifold import TSNE
 #from matplotlib import pyplot as plt
+# from sklearn.manifold import TSNE
+# from matplotlib import pyplot as plt
 import argparse
+import os
 import shutil
+
+import dlib
+import numpy as np
+from skimage import io
+
 predictor_path = "./shape_predictor_68_face_landmarks.dat"
 face_rec_model_path = "./dlib_face_recognition_resnet_model_v1.dat"
 #faces_folder_path = "/home2/rajib/face/test9"
@@ -185,33 +184,33 @@ def face_feature(frame):
         #dlib.hit_enter_to_continue()
 
 def save(facial_encodings):
-	print(len(facial_encodings))
-	answer =cluster_facial_encodings(facial_encodings)
-        try:
-            shutil.rmtree(result_dir, ignore_errors=True)
-            os.mkdir(result_dir) 
-        except:
-            os.mkdir(result_dir)
-	for i in range(len(answer)):
-	    path = result_dir+"/"+"pic"+ str(i + 1)
-	    os.mkdir(path)
-	for k,d in enumerate(answer):
-	    #j = 0
-	    for elem in d:
-		img=io.imread(elem)
-                pic_name=elem.split("/")[-1]
-                save_path=result_dir+"/pic{}/"+pic_name
-		io.imsave(save_path.format(k+1),img)
-		#j += 1
-        print("Completed")
+    print(len(facial_encodings))
+    answer =cluster_facial_encodings(facial_encodings)
+    try:
+        shutil.rmtree(result_dir, ignore_errors=True)
+        os.mkdir(result_dir)
+    except:
+        os.mkdir(result_dir)
+    for i in range(len(answer)):
+        path = result_dir+"/"+"pic"+ str(i + 1)
+        os.mkdir(path)
+    for k,d in enumerate(answer):
+        #j = 0
+        for elem in d:
+            img=io.imread(elem)
+            pic_name=elem.split("/")[-1]
+            save_path=result_dir+"/pic{}/"+pic_name
+            io.imsave(save_path.format(k+1),img)
+            #j += 1
+    print("Completed")
 
 def traverse_dir(dst_path):
-	# generate features
-	for root, subdirs, files in os.walk(dst_path):
-		for f in files:
-			img = os.path.join(root, f)
-			face_feature(img)
-			
+    # generate features
+    for root, subdirs, files in os.walk(dst_path):
+        for f in files:
+            img = os.path.join(root, f)
+            face_feature(img)
+
 
 def parse_args(args):
     if args["image"] and os.path.isfile(args["image"]):
