@@ -1,0 +1,6 @@
+
+*.dat
+*.hdf5
+*.mp4
+*.jpg
+Results/Extracted_frames/result.csv
